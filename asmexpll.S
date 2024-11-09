@@ -106,7 +106,9 @@ handle_state_is_not_running:
 
 .macro DISPATCH
     # jmp     *(routines, opcode64, 8)
-    shl    $8, opcode64      # Умножить номер функции на 0x100
+    //shl    $8, opcode64      # Умножить номер функции на 0x100
+    shl    $7, opcode64      # Умножить номер функции на 0x80
+    //shl    $12, opcode64      # Умножить номер функции на 0x1000
     lea    (routines, opcode64), opcode64  # Добавить базовый адрес первой функции
     jmp    *opcode64         # Перейти по адресу, хранящемуся в %rdx
 .endm
@@ -306,7 +308,9 @@ sz_stack_underflow:
 .macro RTN name
     .global srv_\name
     .type srv_\name, @function
-    .align 0x100
+    .align 0x80 # This gives best result on AMD Ryzen 5
+    //.align 0x100
+    //.align 0x1000
 srv_\name:
     .if DBGCNT
     incq    cnt_\name(%rip)
@@ -372,6 +376,7 @@ end_of_\name:
       POP_IMM acc
     .endif
     BAIL_ON_ERROR
+    /*
     push    %rdi
     push    %rsi
     push    %rcx
@@ -392,6 +397,7 @@ end_of_\name:
     pop     %rcx
     pop     %rsi
     pop     %rdi
+    */
     NEXT 1
     .section .data
 sz_fmt_str:

@@ -37,7 +37,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 /* Program to print all prime numbers < 10000 */
 const Instr_t Primes[PROGRAM_SIZE] = {
-    Instr_Push, 100000, // nmax (maximal number to test)
+    Instr_Push, 300000, // nmax (maximal number to test)
     Instr_Push, 2,      // nmax, c (minimal number to test)
     /* back: */
     Instr_Over,         // nmax, c, nmax

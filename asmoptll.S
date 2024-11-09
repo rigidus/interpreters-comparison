@@ -587,6 +587,7 @@ sz_divide_zero:
       POP_IMM acc
     .endif
     BAIL_ON_ERROR
+    /*
     push    %rdi
     push    %rsi
     push    %rcx
@@ -607,6 +608,7 @@ sz_divide_zero:
     pop     %rcx
     pop     %rsi
     pop     %rdi
+    */
     ADVANCE_PC 1
     FETCH_DECODE
     DISPATCH

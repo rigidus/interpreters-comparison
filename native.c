@@ -47,16 +47,17 @@ int main() {
         return 1;
     }
 
-    for (int i = 2; i < 100000; i++) {
-        bool is_prime = true;
-        for (int divisor = 2; divisor < i; divisor++) {
+    for (volatile int i = 2; i < 300000; i++) {
+        volatile int is_prime = 1;
+        for (volatile int divisor = 2; divisor < i; divisor++) {
             if (i % divisor == 0) {
-                is_prime = false;
+                is_prime = 0;
                 break;
             }
         }
-        if (is_prime)
-            printf("[%d]\n", i);
+        if (is_prime) {
+            /* printf("[%d]\n", i); */
+        }
     }
     return 0;
 }
