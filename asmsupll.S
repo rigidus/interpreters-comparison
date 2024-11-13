@@ -102,8 +102,7 @@ handle_state_is_not_running:
 
 
 .macro DISPATCH
-    lea    (%rdi, opcode64, 8), opcode64
-    jmp    *opcode64
+    jmp     *(routines, opcode64, 8)
 .endm
 
 
@@ -271,75 +270,6 @@ sz_stack_underflow:
 
 
 #### ROUTINES ####
-
-trampoline_table:
-    jmp srv_Break
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Nop
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Halt
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Push
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Print
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Jne
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Swap
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Dup
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Je
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Inc
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Add
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Sub
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Mul
-    .byte 0x90, 0x90, 0x90
-    jmp sr_Rand
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Dec
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Drop
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Over
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Mod
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Jump
-    .byte 0x90, 0x90, 0x90
-    jmp srv_And
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Or
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Xor
-    .byte 0x90, 0x90, 0x90
-    jmp srv_SHL
-    .byte 0x90, 0x90, 0x90
-    jmp srv_SHR
-    .byte 0x90, 0x90, 0x90
-    jmp srv_SQRT
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Rot
-    .byte 0x90, 0x90, 0x90
-    jmp srv_Pick
-    .byte 0x90, 0x90, 0x90
-
-    jmp srv_SuPush
-    .byte 0x90, 0x90, 0x90
-    jmp srv_SuOverOverSub
-    .byte 0x90, 0x90, 0x90
-    jmp srv_SuOverOverSwapSub
-    .byte 0x90, 0x90, 0x90
-    jmp srv_SuOverOverSwapMod
-    .byte 0x90, 0x90, 0x90
-    jmp srv_SuOverPrint
-    .byte 0x90, 0x90, 0x90
-    jmp srv_SuDropInc
-    .byte 0x90, 0x90, 0x90
 
 .macro RTN name
     .global srv_\name
@@ -893,8 +823,6 @@ asm_main:
     mov     sp, stack_max
     mov     sp, stack_min
     sub     $0x100, stack_min  # STACK_CAPACITY = 32
-
-    lea     trampoline_table(%rip), %rdi
 
     FETCH_DECODE
     DISPATCH

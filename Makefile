@@ -10,8 +10,8 @@ COMMON_SRC = common.c
 COMMON_OBJ := $(COMMON_SRC:.c=.o)
 COMMON_HEADERS = common.h
 
-# ALL = switched threaded predecoded subroutined threaded-cached tailrecursive asmopt asmexp asmtrm asmsup translated native
-ALL =  asmopt asmexp asmtrm asmsup native
+ALL = switched threaded predecoded subroutined threaded-cached tailrecursive asmopt asmexp asmtrm asmsup translated native
+# ALL =  asmopt asmexp asmtrm asmsup native
 
 # Must be the first target for the magic below to work
 all: $(ALL)
