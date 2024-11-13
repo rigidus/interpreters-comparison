@@ -44,7 +44,6 @@
 # define acc            %r13
 
 
-.section .text
 .macro NEXT cnt:req
     ADVANCE_PC \cnt
     FETCH_DECODE
@@ -103,12 +102,8 @@ handle_state_is_not_running:
 
 
 .macro DISPATCH
-    # jmp     *(routines, opcode64, 8)
-    //shl    $8, opcode64      # Умножить номер функции на 0x100
-    shl    $7, opcode64      # Умножить номер функции на 0x80
-    //shl    $12, opcode64      # Умножить номер функции на 0x1000
-    lea    (routines, opcode64), opcode64  # Добавить базовый адрес первой функции
-    jmp    *opcode64         # Перейти по адресу, хранящемуся в %rdx
+    lea    (%rdi, opcode64, 8), opcode64
+    jmp    *opcode64
 .endm
 
 
@@ -272,43 +267,69 @@ sz_stack_underflow:
 
 
 #### ROUTINES ####
-/*
-    &srv_Break,
-    &srv_Nop,
-    &srv_Halt,
-    &srv_Push,
-    &srv_Print,
-    &sr_Jne,
-    &srv_Swap,
-    &srv_Dup,
-    &srv_Je,
-    &srv_Inc,
-    &sr_Add,
-    &srv_Sub,
-    &sr_Mul,
-    &sr_Rand,
-    &sr_Dec,
-    &srv_Drop,
-    &srv_Over,
-    &srv_Mod,
-    &srv_Jump,
-    &sr_And,
-    &sr_Or,
-    &sr_Xor,
-    &sr_SHL,
-    &sr_SHR,
-    &sr_SQRT,
-    &sr_Rot,
-    &sr_Pick
-*/
+
+trampoline_table:
+    jmp srv_Break
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Nop
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Halt
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Push
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Print
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Jne
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Swap
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Dup
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Je
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Inc
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Add
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Sub
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Mul
+    .byte 0x90, 0x90, 0x90
+    jmp sr_Rand
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Dec
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Drop
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Over
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Mod
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Jump
+    .byte 0x90, 0x90, 0x90
+    jmp srv_And
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Or
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Xor
+    .byte 0x90, 0x90, 0x90
+    jmp srv_SHL
+    .byte 0x90, 0x90, 0x90
+    jmp srv_SHR
+    .byte 0x90, 0x90, 0x90
+    jmp srv_SQRT
+    .byte 0x90, 0x90, 0x90
+    jmp srv_Rot
+    .byte 0x90, 0x90, 0x90
+    jmp sr_Pick
+    .byte 0x90, 0x90, 0x90
+
 
 
 .macro RTN name
     .global srv_\name
     .type srv_\name, @function
-    .align 0x80 # This gives best result on AMD Ryzen 5
-    //.align 0x100
-    //.align 0x1000
+    .align 0x10
 srv_\name:
     .if DBGCNT
     incq    cnt_\name(%rip)
@@ -757,7 +778,7 @@ asm_main:
     mov     sp, stack_min
     sub     $0x100, stack_min  # STACK_CAPACITY = 32
 
-    lea     srv_Break(%rip), %rdi
+    lea     trampoline_table(%rip), %rdi
 
     FETCH_DECODE
     DISPATCH

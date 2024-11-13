@@ -47,7 +47,7 @@ int main() {
         return 1;
     }
 
-    for (volatile int i = 2; i < 300000; i++) {
+    for (volatile int i = 2; i < 100000; i++) {
         volatile int is_prime = 1;
         for (volatile int divisor = 2; divisor < i; divisor++) {
             if (i % divisor == 0) {
@@ -56,7 +56,7 @@ int main() {
             }
         }
         if (is_prime) {
-            /* printf("[%d]\n", i); */
+            printf("[%d]\n", i);
         }
     }
     return 0;
