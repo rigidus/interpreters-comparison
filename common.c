@@ -68,10 +68,9 @@ const Instr_t Primes[PROGRAM_SIZE] = {
     /* end: */
     Instr_Halt           // nmax, c (== nmax)
 
-    /* Instr_Push, 100000, */
-    /* Instr_Push, 100000, */
-    /* Instr_Over */
 };
+
+
 
 /* Choose a default program we are about to simulate */
 const Instr_t* DefProgram = Primes;

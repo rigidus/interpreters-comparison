@@ -10,8 +10,8 @@ COMMON_SRC = common.c
 COMMON_OBJ := $(COMMON_SRC:.c=.o)
 COMMON_HEADERS = common.h
 
-# ALL = switched threaded predecoded subroutined threaded-cached tailrecursive asmopt asmexp translated native
-ALL =  asmopt asmexp asmtrm native
+# ALL = switched threaded predecoded subroutined threaded-cached tailrecursive asmopt asmexp asmtrm asmsup translated native
+ALL =  asmopt asmexp asmtrm asmsup native
 
 # Must be the first target for the magic below to work
 all: $(ALL)
@@ -76,6 +76,13 @@ asmtrmll: asmtrmll.o
 
 asmtrm: CFLAGS += -foptimize-sibling-calls
 asmtrm: asmtrmll.o asmtrm.o
+	$(CC) -g -pg $^ -lm -o $@
+
+asmsupll: asmsupll.o
+	$(CC) -g -pg -c $< -o $@
+
+asmsup: CFLAGS += -foptimize-sibling-calls
+asmsup: asmsupll.o asmsup.o
 	$(CC) -g -pg $^ -lm -o $@
 
 

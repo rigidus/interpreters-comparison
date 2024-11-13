@@ -68,6 +68,13 @@ Instr_SQRT   = 0x0018,
 Instr_Rot    = 0x0019,
 Instr_Pick   = 0x001a,
 
+Instr_SuPush = 0x001b,
+Instr_SuOverOverSub = 0x001c,
+Instr_SuOverOverSwapSub = 0x001d,
+Instr_SuOverOverSwapMod = 0x001e,
+Instr_SuOverPrint = 0x001f,
+Instr_SuDropInc = 0x0020
+
 };
 
 typedef enum {
