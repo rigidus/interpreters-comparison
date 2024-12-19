@@ -35,6 +35,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 
 #include "common.h"
 
+int debug = 0;
+
 /* Program to print all prime numbers < 10000 */
 const Instr_t Primes[PROGRAM_SIZE] = {
     Instr_Push, 100000, // nmax (maximal number to test)
@@ -198,6 +200,8 @@ uint64_t parse_args(int argc, char** argv) {
     for (int i = 1; i < argc; ++i) {
         if (!strcmp(argv[i], "--help"))
             report_usage_and_exit(argv[0], 0);
+        if (!strcmp(argv[i], "--debug"))
+            debug = 1;
         else if (!strncmp(argv[i], steplimit_opt, strlen(steplimit_opt))) {
             char *endptr = NULL;
             steplimit = strtoll(argv[i] + strlen(steplimit_opt), &endptr, 10);

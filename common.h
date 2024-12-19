@@ -33,6 +33,8 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. */
 #ifndef COMMON_H_
 #define COMMON_H_
 
+extern int debug;
+
 /* Instruction Set Architecture:
    opcodes and arguments for individual instructions.
    Those marked with "imm" use the next machine word
